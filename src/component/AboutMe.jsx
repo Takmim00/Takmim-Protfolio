@@ -1,15 +1,16 @@
 import code from "../assets/coding.jpg";
-
 import { motion, useInView } from "framer-motion";
-
 import { useRef } from "react";
 import { FiArrowDownRight } from "react-icons/fi";
+import { usePortfolio } from "../context/PortfolioContext";
 
 const AboutMe = () => {
+  const { portfolioData } = usePortfolio();
+  const about = portfolioData.about;
+
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, threshold: 0.2 });
 
-  // Skills with proficiency levels
   const skills = [
     { name: "HTML", level: 90 },
     { name: "CSS", level: 85 },
@@ -23,13 +24,11 @@ const AboutMe = () => {
 
   return (
     <section className=" text-white py-16 overflow-hidden relative">
-      {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden opacity-10">
         <div className="absolute top-20 left-10 w-40 h-40 rounded-full bg-orange-500 blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-60 h-60 rounded-full bg-amber-400 blur-3xl"></div>
       </div>
 
-      {/* Code-like decorative elements */}
       <div className="absolute left-0 top-0 text-orange-500/20 text-6xl font-mono hidden lg:block">
         {"<about>"}
       </div>
@@ -39,7 +38,6 @@ const AboutMe = () => {
 
       <div className="container mx-auto px-4" ref={ref}>
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-          {/* Left: Image with animated border */}
           <motion.div
             className="relative w-full max-w-md aspect-square"
             initial={{ opacity: 0, x: -100 }}
@@ -48,7 +46,6 @@ const AboutMe = () => {
           >
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-amber-400 via-orange-500 to-amber-400 animate-pulse-slow"></div>
 
-            {/* Rotating border effect */}
             <div className="absolute inset-2 rounded-2xl overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-600 opacity-80 animate-spin-slow"></div>
             </div>
@@ -56,11 +53,10 @@ const AboutMe = () => {
             <div className="absolute inset-3 rounded-xl overflow-hidden bg-stone-900">
               <div className="w-full h-full relative">
                 <img
-                  src={code}
+                  src={about.image || "/placeholder.svg"}
                   alt="Developer workspace"
                   className=" object-cover w-full h-full"
                 />
-                {/* Overlay with code-like elements */}
                 <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
                   <div className="text-amber-400/80 font-mono text-sm p-4 overflow-hidden">
                     {Array(10)
@@ -76,14 +72,12 @@ const AboutMe = () => {
             </div>
           </motion.div>
 
-          {/* Right: Content with staggered animations */}
           <motion.div
             className="flex-1 space-y-8"
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
           >
-            {/* Title with animated underline */}
             <div className="relative">
               <motion.h2
                 className="text-6xl md:text-7xl font-extrabold tracking-tight"
@@ -112,35 +106,15 @@ const AboutMe = () => {
               />
             </div>
 
-            {/* Description with highlighted keywords */}
             <motion.p
               className="text-gray-300 text-lg leading-relaxed"
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : {}}
               transition={{ duration: 0.8, delay: 0.6 }}
             >
-              I'm a{" "}
-              <span className="text-amber-400 font-medium">
-                junior web developer
-              </span>{" "}
-              passionate about building beautiful and functional websites. I
-              specialize in{" "}
-              <span className="text-orange-500 font-medium">
-                full-stack development
-              </span>{" "}
-              and have experience with HTML, CSS, Tailwind CSS, JavaScript,
-              React JS, Node JS, Express JS, MongoDB, and GitHub. I love{" "}
-              <span className="text-amber-400 font-medium">
-                solving problems
-              </span>{" "}
-              and learning new skills. Currently, I'm eager to{" "}
-              <span className="text-orange-500 font-medium">collaborate</span>{" "}
-              and grow in the web development field.
+              {about.description}
             </motion.p>
 
-            
-
-            {/* Call to action */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}

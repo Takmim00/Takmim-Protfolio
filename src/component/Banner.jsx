@@ -1,8 +1,8 @@
 import { motion, useAnimation, useInView } from "framer-motion";
-import { Download, Github, Instagram, Linkedin } from "lucide-react";
+import { Download, Github, Instagram, Linkedin } from 'lucide-react';
 import { useEffect, useRef, useState } from "react";
 import { FaDiscord } from "react-icons/fa";
-import resume from "../assets/My_Resume.pdf";
+import { usePortfolio } from "../context/PortfolioContext";
 import img from "../assets/Takmim (2).jpg";
 
 // TypewriterEffect Component
@@ -69,6 +69,10 @@ const SocialIcon = ({ icon: Icon, href, delay = 0 }) => {
 
 // Main Banner Component
 const Banner = () => {
+  const { portfolioData } = usePortfolio();
+  const personal = portfolioData.personal;
+  const social = portfolioData.social;
+
   const controls = useAnimation();
   const ref = useRef(null);
   const inView = useInView(ref, { once: false, threshold: 0.3 });
@@ -281,18 +285,11 @@ const Banner = () => {
               </h3>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-2 leading-tight">
                 <span className="bg-gradient-to-r from-amber-400 to-orange-600 bg-clip-text text-transparent">
-                  A S M Maghferat Takmim
+                  {personal.name}
                 </span>
               </h1>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-                <TypewriterEffect
-                  words={[
-                    "Frontend Developer",
-                    "UI/UX Enthusiast",
-                    "React Specialist",
-                  ]}
-                  speed={80}
-                />
+                <TypewriterEffect words={personal.titles} speed={80} />
               </h2>
             </motion.div>
 
@@ -303,8 +300,7 @@ const Banner = () => {
                 visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
               }}
             >
-              I craft beautiful, responsive, and user-friendly interfaces that
-              deliver exceptional user experiences.
+              {personal.bio}
             </motion.p>
 
             <motion.div
@@ -317,26 +313,10 @@ const Banner = () => {
                 },
               }}
             >
-              <SocialIcon
-                icon={Linkedin}
-                href="https://www.linkedin.com/in/asm-maghferat-takmim89/"
-                delay={0.1}
-              />
-              <SocialIcon
-                icon={Instagram}
-                href="https://www.instagram.com/takmim_00/"
-                delay={0.2}
-              />
-              <SocialIcon
-                icon={Github}
-                href="https://github.com/Takmim00"
-                delay={0.3}
-              />
-              <SocialIcon
-                icon={FaDiscord}
-                href="https://discord.com/channels/778521112262344714/778521112262344717"
-                delay={0.4}
-              />
+              <SocialIcon icon={Linkedin} href={social.linkedin} delay={0.1} />
+              <SocialIcon icon={Instagram} href={social.instagram} delay={0.2} />
+              <SocialIcon icon={Github} href={social.github} delay={0.3} />
+              <SocialIcon icon={FaDiscord} href={social.discord} delay={0.4} />
             </motion.div>
 
             <motion.div
@@ -350,7 +330,7 @@ const Banner = () => {
               }}
             >
               <a
-                href={resume}
+                href={personal.resume}
                 download="Takmim_Resume"
                 className="group relative inline-flex items-center justify-center px-8 py-3 overflow-hidden font-medium transition-all bg-transparent rounded-full hover:bg-transparent"
               >
@@ -386,8 +366,8 @@ const Banner = () => {
             >
               <div className="relative h-64 w-64 md:h-80 md:w-80 lg:h-96 lg:w-96 rounded-full border-4 border-orange-500 overflow-hidden">
                 <img
-                  src={img || "https://via.placeholder.com/400"}
-                  alt="Takmim"
+                  src={personal.profileImage || "https://via.placeholder.com/400"}
+                  alt={personal.name}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -399,7 +379,7 @@ const Banner = () => {
                 transition={{ duration: 0.5, delay: 1 }}
               >
                 <div className="text-center">
-                  <p className="text-amber-400 text-sm font-bold">0+ Years</p>
+                  <p className="text-amber-400 text-sm font-bold">{personal.experience}</p>
                   <p className="text-white text-xs">Experience</p>
                 </div>
               </motion.div>
