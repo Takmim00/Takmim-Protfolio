@@ -1,41 +1,32 @@
-"use client"
-
 import { Download, Menu, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import logo from "../assets/logo.png"
 import resume from "../assets/My_Resume.pdf"
-
 const cn = (...classes) => classes.filter(Boolean).join(" ")
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState("banner")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
   // Handle scroll effects and section highlighting
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
-
       const sections = ["banner", "about", "skill", "project", "contact"]
       const currentSection = sections.find((section) => {
         const element = document.getElementById(section)
         if (!element) return false
-
         const rect = element.getBoundingClientRect()
         return rect.top <= 100 && rect.bottom >= 100
       })
-
       if (currentSection) {
         setActiveSection(currentSection)
       }
     }
-
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
   // Close mobile menu on resize to desktop
   useEffect(() => {
     const handleResize = () => {
@@ -47,12 +38,10 @@ export default function Navbar() {
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
   }, [])
-
   // Lock scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? "hidden" : ""
   }, [mobileMenuOpen])
-
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId)
     if (element) {
@@ -86,12 +75,10 @@ export default function Navbar() {
               <img src={logo || "/placeholder.svg"} alt="Portfolio Logo" className="object-contain h-full w-full" />
             </Link>
           </Link>
-
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <NavLinks activeSection={activeSection} scrollToSection={scrollToSection} />
           </div>
-
           {/* Resume Button (Desktop) */}
           <div className="hidden md:block">
             <a
@@ -110,7 +97,6 @@ export default function Navbar() {
               <span className="invisible relative">Download Resume</span>
             </a>
           </div>
-
           {/* Mobile Menu Button */}
           <button
             className="md:hidden text-white bg-orange-500 hover:bg-orange-600 p-2 rounded-full transition-colors"
@@ -120,7 +106,6 @@ export default function Navbar() {
           </button>
         </div>
       </div>
-
       {/* Mobile Menu */}
       <div
         className={cn(
@@ -135,7 +120,6 @@ export default function Navbar() {
         >
           <X className="h-6 w-6" />
         </button>
-
         <div className="flex flex-col h-full pt-24 px-8 relative z-10  ">
           <div className="absolute inset-0 bg-gradient-to-b from-orange-500/10  to-black/30 pointer-events-none"></div>
           <div className="flex flex-col space-y-2 relative bg-black/50  backdrop-blur-2xl">

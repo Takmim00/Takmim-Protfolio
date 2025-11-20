@@ -111,7 +111,6 @@ const FloatingParticles = ({
     };
 
     animate();
-
     // Cleanup
     return () => {
       window.removeEventListener("resize", resizeCanvas);

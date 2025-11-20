@@ -1,13 +1,10 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, ExternalLink, Github } from "lucide-react";
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const ProjectCard = ({ project }) => {
-
   const [isHovered, setIsHovered] = useState(false);
-
   // Generate a gradient based on the project category
   const getCategoryGradient = (category) => {
     switch (category) {
@@ -21,9 +18,7 @@ const ProjectCard = ({ project }) => {
         return "from-gray-400 to-gray-600";
     }
   };
-
   const gradient = getCategoryGradient(project.category);
-
   return (
     <motion.div
       className="group relative h-full"
@@ -36,7 +31,6 @@ const ProjectCard = ({ project }) => {
       <div
         className={`absolute -inset-0.5 rounded-xl bg-gradient-to-r ${gradient} opacity-75 blur-sm group-hover:opacity-100 transition-opacity duration-300`}
       ></div>
-
       {/* Card Content */}
       <div className="relative bg-gray-900 rounded-lg overflow-hidden h-full flex flex-col">
         {/* Image Container */}
@@ -49,7 +43,6 @@ const ProjectCard = ({ project }) => {
             animate={{ scale: isHovered ? 1.05 : 1 }}
             transition={{ duration: 0.5 }}
           />
-
           {/* Category Badge */}
           <div className="absolute top-3 left-3">
             <div
@@ -58,7 +51,6 @@ const ProjectCard = ({ project }) => {
               {project.category}
             </div>
           </div>
-
           {/* Overlay with Quick Links */}
           <motion.div
             className="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -99,7 +91,6 @@ const ProjectCard = ({ project }) => {
             </div>
           </motion.div>
         </div>
-
         {/* Text Content */}
         <div className="p-6 flex flex-col flex-grow">
           <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
@@ -111,11 +102,9 @@ const ProjectCard = ({ project }) => {
               <ArrowUpRight className="w-5 h-5 text-amber-400" />
             </motion.div>
           </h3>
-
           <p className="text-gray-400 text-sm mb-4 flex-grow">
             {project.bifDescription}
           </p>
-
           {/* Technology Tags */}
           <div className="flex flex-wrap gap-2 mb-4">
             {project.technology.slice(0, 3).map((tech, index) => (
@@ -132,7 +121,6 @@ const ProjectCard = ({ project }) => {
               </span>
             )}
           </div>
-
           {/* View Details Button */}
           <motion.div
             whileHover={{ scale: 1.02 }}

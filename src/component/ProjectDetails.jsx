@@ -1,14 +1,11 @@
 import { motion, useInView } from "framer-motion";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
-
 import { useRef } from "react";
 import { Link, useParams } from "react-router-dom";
-
 const ProjectDetails = () => {
   const { id } = useParams();
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, threshold: 0.1 });
-
   // Sample project data structure
   const projectData = [
     {
@@ -206,7 +203,6 @@ const ProjectDetails = () => {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-orange-500/5 blur-3xl"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-blue-500/5 blur-3xl"></div>
       </div>
-
       <div className="container mx-auto px-4 relative z-10">
         {/* Project Header with Category Badge, Title and Back Button */}
         <div className="mb-16">
@@ -221,7 +217,6 @@ const ProjectDetails = () => {
               {project.category}
             </div>
           </motion.div>
-
           {/* Title and Back Button Row */}
           <div className="flex justify-between items-center mb-6">
             {/* Back Button - Left Side */}
@@ -252,11 +247,9 @@ const ProjectDetails = () => {
             >
               {project.title}
             </motion.h1>
-
             {/* Empty div to balance the layout */}
             <div className="w-[140px]"></div>
           </div>
-
           {/* Underline - Centered */}
           <motion.div
             className="h-1 w-0 bg-gradient-to-r from-amber-400 to-orange-600 mx-auto"
@@ -265,7 +258,6 @@ const ProjectDetails = () => {
             transition={{ duration: 1, delay: 0.3 }}
           />
         </div>
-
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Left Column - Image and Links */}
@@ -288,7 +280,6 @@ const ProjectDetails = () => {
                 />
               </div>
             </div>
-
             {/* Screenshots Gallery */}
             <div className="mb-8">
               <h3 className="text-xl font-bold text-white mb-4">Screenshots</h3>
@@ -307,7 +298,6 @@ const ProjectDetails = () => {
                 ))}
               </div>
             </div>
-
             {/* Project Description */}
             <div className="mb-8">
               <h3 className="text-xl font-bold text-white mb-4">
@@ -317,7 +307,6 @@ const ProjectDetails = () => {
                 {project.description}
               </p>
             </div>
-
             {/* Features List */}
             <div className="mb-8">
               <h3 className="text-xl font-bold text-white mb-4">
@@ -335,7 +324,6 @@ const ProjectDetails = () => {
               </ul>
             </div>
           </motion.div>
-
           {/* Right Column - Technologies and Links */}
           <motion.div
             className="lg:col-span-1"
@@ -362,7 +350,6 @@ const ProjectDetails = () => {
                 ))}
               </div>
             </div>
-
             {/* Project Links */}
             <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 mb-8">
               <h3 className="text-xl font-bold text-white mb-4">

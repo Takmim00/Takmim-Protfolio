@@ -1,5 +1,3 @@
-"use client"
-
 import emailjs from "@emailjs/browser"
 import { motion, useAnimation, useInView } from "framer-motion"
 import { Github, Instagram, Linkedin, Loader2, Mail, MapPin, Phone, Send, Twitter } from 'lucide-react'
@@ -45,7 +43,6 @@ const Contact = () => {
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
-
     // Clear error when user types
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }))
@@ -54,7 +51,6 @@ const Contact = () => {
 
   const validateForm = () => {
     const newErrors = {}
-
     if (!formData.name.trim()) newErrors.name = "Name is required"
     if (!formData.email.trim()) {
       newErrors.email = "Email is required"
@@ -63,7 +59,6 @@ const Contact = () => {
     }
     if (!formData.subject.trim()) newErrors.subject = "Subject is required"
     if (!formData.message.trim()) newErrors.message = "Message is required"
-
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -76,10 +71,8 @@ const Contact = () => {
       const serviceId = "service_e9iqelg"
       const templateId = "template_ecf26bv"
       const publicKey = "_FMPfnej307GndFRC"
-
       // Include the subject in the message body since the template has a hardcoded subject
       const enhancedMessage = `Subject: ${formData.subject}\n\n${formData.message}`
-
       const templateParams = {
         from_name: formData.name,
         from_email: formData.email,
@@ -90,11 +83,7 @@ const Contact = () => {
         // For reply functionality
         reply_to: formData.email,
       }
-
-      console.log("Sending email with params:", templateParams)
-
       await emailjs.send(serviceId, templateId, templateParams, publicKey)
-
       toast.success("Message sent successfully! I'll get back to you soon.")
       setFormData({ name: "", email: "", subject: "", message: "" })
     } catch (error) {
@@ -352,7 +341,6 @@ const Contact = () => {
                     Contact Info
                   </button>
                 </div>
-
                 {/* Mobile view content */}
                 <div className="lg:hidden">
                   {/* Contact info tab content */}
@@ -392,7 +380,6 @@ const Contact = () => {
                           </div>
                         </div>
                       ))}
-
                       {/* Social links for mobile */}
                       <div className="pt-6 border-t border-gray-800/50">
                         <h4 className="mb-4 text-base font-medium text-white">Follow Me</h4>
@@ -424,7 +411,6 @@ const Contact = () => {
                       </div>
                     </div>
                   )}
-
                   {/* Message form tab content - KEY FIX: Always render the form but control visibility with CSS */}
                   <div className={activeTab === "message" ? "block" : "hidden"}>
                     <motion.h3
@@ -499,7 +485,6 @@ const Contact = () => {
                           </div>
                         </motion.div>
                       </div>
-
                       {/* Subject field */}
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -527,7 +512,6 @@ const Contact = () => {
                           {errors.subject && <p className="mt-1 text-xs text-red-500">{errors.subject}</p>}
                         </div>
                       </motion.div>
-
                       {/* Message field */}
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -555,7 +539,6 @@ const Contact = () => {
                           {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message}</p>}
                         </div>
                       </motion.div>
-
                       {/* Submit button */}
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -593,7 +576,6 @@ const Contact = () => {
                     </form>
                   </div>
                 </div>
-
                 {/* Desktop form (always visible) */}
                 <div className="hidden lg:block">
                   <motion.h3
@@ -609,7 +591,6 @@ const Contact = () => {
                   >
                     Send Me a Message
                   </motion.h3>
-
                   <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                       {/* Name field */}
@@ -639,7 +620,6 @@ const Contact = () => {
                           {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
                         </div>
                       </motion.div>
-
                       {/* Email field */}
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -668,7 +648,6 @@ const Contact = () => {
                         </div>
                       </motion.div>
                     </div>
-
                     {/* Subject field */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -696,7 +675,6 @@ const Contact = () => {
                         {errors.subject && <p className="mt-1 text-xs text-red-500">{errors.subject}</p>}
                       </div>
                     </motion.div>
-
                     {/* Message field */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -724,7 +702,6 @@ const Contact = () => {
                         {errors.message && <p className="mt-1 text-xs text-red-500">{errors.message}</p>}
                       </div>
                     </motion.div>
-
                     {/* Submit button */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}

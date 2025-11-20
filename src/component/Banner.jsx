@@ -10,7 +10,6 @@ const TypewriterEffect = ({ words = ["Frontend Developer"], speed = 100 }) => {
   const [currentText, setCurrentText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [typingSpeed, setTypingSpeed] = useState(speed);
-
   useEffect(() => {
     const word = words[currentWordIndex];
 

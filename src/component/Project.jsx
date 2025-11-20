@@ -1,48 +1,39 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { usePortfolio } from "../context/PortfolioContext";
-
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ProjectCard from "./ProjectCard";
-
 const Project = () => {
   const { portfolioData } = usePortfolio();
   const projectData = portfolioData.projects;
-
   const [activeCategory, setActiveCategory] = useState("All");
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, threshold: 0.1 });
   const [currentPage, setCurrentPage] = useState(0);
-
   const categories = [
     "All",
     ...new Set(projectData.map((project) => project.category)),
   ];
-
   const filteredProjects =
     activeCategory === "All"
       ? projectData
       : projectData.filter((project) => project.category === activeCategory);
-
   const projectsPerPage = 4;
   const pageCount = Math.ceil(filteredProjects.length / projectsPerPage);
   const displayedProjects = filteredProjects.slice(
     currentPage * projectsPerPage,
     (currentPage + 1) * projectsPerPage
   );
-
   const nextPage = () => {
     if (currentPage < pageCount - 1) {
       setCurrentPage(currentPage + 1);
     }
   };
-
   const prevPage = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     }
   };
-
   return (
     <section
       ref={containerRef}
