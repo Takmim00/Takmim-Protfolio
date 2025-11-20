@@ -8,18 +8,35 @@ import {
 } from "react-icons/ri";
 import { SiCss3, SiExpress, SiMongodb, SiNextdotjs } from "react-icons/si";
 import { TbBrandJavascript } from "react-icons/tb";
+import { usePortfolio } from "../context/PortfolioContext";
 
-const SkillsShowcase = () => {
+const getIconForSkill = (skillName) => {
+  const iconMap = {
+    "HTML5": FaHtml5,
+    "CSS3": SiCss3,
+    "JavaScript": TbBrandJavascript,
+    "React": RiReactjsLine,
+    "Next.js": SiNextdotjs,
+    "Tailwind": RiTailwindCssFill,
+    "Node.js": FaNodeJs,
+    "Express": SiExpress,
+    "MongoDB": SiMongodb,
+    "Firebase": RiFirebaseFill,
+    "GitHub": FaGithub,
+    "Figma": FaFigma,
+  };
+  return iconMap[skillName] || RiReactjsLine;
+};
+
+const Skill = () => {
+  const { portfolioData } = usePortfolio();
+  const skillsFromContext = portfolioData.skills;
   // State
   const [isVisible, setIsVisible] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
   const [selectedSkill, setSelectedSkill] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-
-  // Refs
   const sectionRef = useRef(null);
- 
-
   // Intersection Observer for animations
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -144,178 +161,13 @@ const SkillsShowcase = () => {
     { id: "tools", name: "Tools", color: "#F24E1E" },
   ];
 
-  const skills = [
-    {
-      id: 1,
-      name: "HTML5",
-      icon: FaHtml5,
-      color: "#E34F26",
-      level: 100,
-      category: "frontend",
-      description: "Semantic markup and accessibility",
-      details:
-        "Expert in semantic HTML5 elements, ARIA attributes, and creating accessible web content. Experienced with HTML5 APIs including Web Storage, Canvas, and Geolocation.",
-      keywords: ["html", "markup", "semantic", "accessibility", "web"],
-      animationDuration: 2.5,
-    },
-    {
-      id: 2,
-      name: "CSS3",
-      icon: SiCss3,
-      color: "#1572B6",
-      level: 100,
-      category: "frontend",
-      description: "Advanced layouts and animations",
-      details:
-        "Proficient in CSS Grid, Flexbox, and responsive design techniques. Skilled at creating complex animations and transitions. Experience with CSS preprocessors like SASS and PostCSS.",
-      keywords: [
-        "css",
-        "styles",
-        "layout",
-        "responsive",
-        "animation",
-        "design",
-      ],
-      animationDuration: 3,
-    },
-    {
-      id: 3,
-      name: "JavaScript",
-      icon: TbBrandJavascript,
-      color: "#F7DF1E",
-      level: 100,
-      category: "frontend",
-      description: "ES6+ and modern patterns",
-      details:
-        "Strong understanding of modern JavaScript including ES6+ features, asynchronous programming with Promises and async/await, and functional programming concepts.",
-      keywords: ["js", "javascript", "es6", "frontend", "programming"],
-      animationDuration: 2.8,
-    },
-    {
-      id: 5,
-      name: "React",
-      icon: RiReactjsLine,
-      color: "#61DAFB",
-      level: 100,
-      category: "frontend",
-      description: "Component architecture and hooks",
-      details:
-        "Expert in React component patterns, hooks, context API, and performance optimization techniques. Experience with React ecosystem libraries like React Query and React Router.",
-      keywords: ["react", "frontend", "ui", "components", "hooks", "jsx"],
-      animationDuration: 3.2,
-    },
-    {
-      id: 6,
-      name: "Next.js",
-      icon: SiNextdotjs,
-      color: "#ffffff",
-      level: 100,
-      category: "frontend",
-      description: "Server-side rendering",
-      details:
-        "Proficient with Next.js App Router and Pages Router, server components, server actions, and various rendering strategies including SSR, SSG, and ISR.",
-      keywords: ["next", "nextjs", "ssr", "react", "framework"],
-      animationDuration: 2.7,
-    },
-    {
-      id: 8,
-      name: "Tailwind",
-      icon: RiTailwindCssFill,
-      color: "#06B6D4",
-      level: 100,
-      category: "frontend",
-      description: "Utility-first CSS",
-      details:
-        "Expert in using Tailwind CSS for rapid UI development, including customizing the configuration, creating component patterns, and optimizing for production.",
-      keywords: ["tailwind", "css", "utility", "styling", "design"],
-      animationDuration: 3.5,
-    },
-    {
-      id: 9,
-      name: "Node.js",
-      icon: FaNodeJs,
-      color: "#339933",
-      level: 100,
-      category: "backend",
-      description: "Server-side JavaScript",
-      details:
-        "Proficient in building scalable server applications with Node.js, including REST APIs, microservices, and real-time applications with WebSockets.",
-      keywords: ["node", "nodejs", "backend", "server", "javascript"],
-      animationDuration: 2.9,
-    },
-    {
-      id: 10,
-      name: "Express",
-      icon: SiExpress,
-      color: "#FFFFFF",
-      level: 100,
-      category: "backend",
-      description: "Web application framework",
-      details:
-        "Experienced with Express.js for building web servers and APIs, including middleware development, route handling, and integration with various databases.",
-      keywords: [
-        "express",
-        "expressjs",
-        "backend",
-        "api",
-        "server",
-        "framework",
-      ],
-      animationDuration: 3.3,
-    },
-    {
-      id: 11,
-      name: "MongoDB",
-      icon: SiMongodb,
-      color: "#47A248",
-      level: 100,
-      category: "backend",
-      description: "NoSQL database",
-      details:
-        "Skilled in MongoDB schema design, CRUD operations, aggregation pipelines, and integration with Node.js applications using Mongoose ODM.",
-      keywords: ["mongodb", "database", "nosql", "backend", "data"],
-      animationDuration: 3.1,
-    },
-    {
-      id: 12,
-      name: "Firebase",
-      icon: RiFirebaseFill,
-      color: "#FFCA28",
-      level: 100,
-      category: "backend",
-      description: "Backend as a service",
-      details:
-        "Proficient with Firebase services including Authentication, Firestore, Realtime Database, Cloud Functions, and Hosting for building serverless applications.",
-      keywords: ["firebase", "backend", "database", "auth", "serverless"],
-      animationDuration: 2.6,
-    },
-    {
-      id: 14,
-      name: "GitHub",
-      icon: FaGithub,
-      color: "#FFFFFF",
-      level: 100,
-      category: "tools",
-      description: "Version control and collaboration",
-      details:
-        "Expert in Git version control and GitHub workflows, including branching strategies, pull requests, code reviews, and CI/CD pipelines with GitHub Actions.",
-      keywords: ["github", "git", "version control", "collaboration", "tools"],
-      animationDuration: 3.4,
-    },
-    {
-      id: 15,
-      name: "Figma",
-      icon: FaFigma,
-      color: "#F24E1E",
-      level: 100,
-      category: "tools",
-      description: "UI/UX design and prototyping",
-      details:
-        "Proficient with Figma for UI design, prototyping, and collaboration with design teams. Experience with creating and using design systems and component libraries.",
-      keywords: ["figma", "design", "ui", "ux", "prototyping", "tools"],
-      animationDuration: 2.8,
-    },
-  ];
+  const skills = skillsFromContext.map(skill => ({
+    ...skill,
+    icon: getIconForSkill(skill.name), 
+    details: skill.description,
+    keywords: [skill.name.toLowerCase(), skill.category, skill.description.toLowerCase()],
+    animationDuration: 2.5 + Math.random(),
+  }));
 
   // Filter skills by search query and active category
   const filteredSkills = skills.filter((skill) => {
@@ -338,7 +190,7 @@ const SkillsShowcase = () => {
   // Event handlers
   const handleCategoryChange = (category) => {
     setActiveCategory(category);
-    setSelectedSkill(null); // Clear selected skill when changing categories
+    setSelectedSkill(null);
   };
 
   const handleSkillClick = (skill) => {
@@ -353,7 +205,6 @@ const SkillsShowcase = () => {
     >
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Gradient backgrounds */}
         <motion.div
           className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-orange-500/5 blur-3xl"
           animate={{
@@ -379,8 +230,6 @@ const SkillsShowcase = () => {
             delay: 2,
           }}
         />
-
-        {/* Floating particles */}
         {Array.from({ length: 12 }).map((_, i) => (
           <motion.div
             key={i}
@@ -409,7 +258,6 @@ const SkillsShowcase = () => {
           />
         ))}
       </div>
-
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <motion.div
@@ -433,7 +281,6 @@ const SkillsShowcase = () => {
             animate={isVisible ? "visible" : "hidden"}
           />
         </motion.div>
-
         {/* Category Filters */}
         <motion.div
           className="flex flex-wrap justify-center gap-3 mb-12"
@@ -456,7 +303,6 @@ const SkillsShowcase = () => {
           >
             All Skills
           </button>
-
           {categories.map((category) => (
             <button
               key={category.id}
@@ -480,7 +326,6 @@ const SkillsShowcase = () => {
             </button>
           ))}
         </motion.div>
-
         {/* Search Results Count */}
         {searchQuery && (
           <motion.div
@@ -490,11 +335,10 @@ const SkillsShowcase = () => {
             transition={{ duration: 0.3 }}
           >
             Found {filteredSkills.length}{" "}
-            {filteredSkills.length === 1 ? "skill" : "skills"} matching "
-            {searchQuery}"
+            {filteredSkills.length === 1 ? "skill" : "skills"} matching 
+            {searchQuery}
           </motion.div>
         )}
-
         {/* Selected Skill Details */}
         {selectedSkill && (
           <motion.div
@@ -530,7 +374,6 @@ const SkillsShowcase = () => {
                 </span>
               </div>
             </div>
-
             <div className="h-2 w-full bg-gray-800 rounded-full mb-6 overflow-hidden">
               <motion.div
                 className="h-full rounded-full"
@@ -540,11 +383,9 @@ const SkillsShowcase = () => {
                 transition={{ duration: 0.8, ease: "easeOut" }}
               />
             </div>
-
             <p className="text-gray-300 leading-relaxed">
               {selectedSkill.details}
             </p>
-
             {/* Keywords */}
             <motion.div
               className="mt-4 flex flex-wrap gap-2"
@@ -569,7 +410,6 @@ const SkillsShowcase = () => {
                 </motion.span>
               ))}
             </motion.div>
-
             <motion.button
               className="mt-4 px-4 py-2 rounded-md bg-gray-800 text-gray-300 hover:bg-gray-700 transition-colors"
               onClick={() => setSelectedSkill(null)}
@@ -581,7 +421,6 @@ const SkillsShowcase = () => {
             </motion.button>
           </motion.div>
         )}
-
         {/* No Results Message */}
         {filteredSkills.length === 0 && (
           <motion.div
@@ -623,7 +462,6 @@ const SkillsShowcase = () => {
             </motion.button>
           </motion.div>
         )}
-
         {/* Skills Grid */}
         {filteredSkills.length > 0 && (
           <motion.div
@@ -691,7 +529,6 @@ const SkillsShowcase = () => {
                           }}
                         />
                       </svg>
-
                       {/* Icon with Framer Motion animation */}
                       <div className="absolute inset-0 flex items-center justify-center">
                         <motion.div
@@ -710,12 +547,10 @@ const SkillsShowcase = () => {
                         </motion.div>
                       </div>
                     </div>
-
                     {/* Skill Name */}
                     <h3 className="text-white font-medium text-center text-sm md:text-base">
                       {skill.name}
                     </h3>
-
                     {/* Skill Level Indicator */}
                     <div className="w-full mt-2 px-2">
                       <div className="relative h-1 bg-gray-800 rounded-full overflow-hidden">
@@ -743,4 +578,4 @@ const SkillsShowcase = () => {
   );
 };
 
-export default SkillsShowcase;
+export default Skill;
