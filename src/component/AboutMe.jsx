@@ -1,4 +1,3 @@
-import code from "../assets/coding.jpg";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { FiArrowDownRight } from "react-icons/fi";
@@ -7,35 +6,20 @@ import { usePortfolio } from "../context/PortfolioContext";
 const AboutMe = () => {
   const { portfolioData } = usePortfolio();
   const about = portfolioData.about;
-
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, threshold: 0.2 });
-
-  const skills = [
-    { name: "HTML", level: 90 },
-    { name: "CSS", level: 85 },
-    { name: "Tailwind", level: 90 },
-    { name: "JavaScript", level: 80 },
-    { name: "React", level: 85 },
-    { name: "Node.js", level: 75 },
-    { name: "Express", level: 70 },
-    { name: "MongoDB", level: 65 },
-  ];
-
   return (
     <section className=" text-white py-16 overflow-hidden relative">
       <div className="absolute inset-0 overflow-hidden opacity-10">
         <div className="absolute top-20 left-10 w-40 h-40 rounded-full bg-orange-500 blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-60 h-60 rounded-full bg-amber-400 blur-3xl"></div>
       </div>
-
       <div className="absolute left-0 top-0 text-orange-500/20 text-6xl font-mono hidden lg:block">
         {"<about>"}
       </div>
       <div className="absolute right-0 bottom-20 text-orange-500/20 text-6xl font-mono hidden lg:block">
         {"</about>"}
       </div>
-
       <div className="container mx-auto px-4" ref={ref}>
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
           <motion.div
@@ -45,11 +29,9 @@ const AboutMe = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-amber-400 via-orange-500 to-amber-400 animate-pulse-slow"></div>
-
             <div className="absolute inset-2 rounded-2xl overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-600 opacity-80 animate-spin-slow"></div>
             </div>
-
             <div className="absolute inset-3 rounded-xl overflow-hidden bg-stone-900">
               <div className="w-full h-full relative">
                 <img
@@ -71,7 +53,6 @@ const AboutMe = () => {
               </div>
             </div>
           </motion.div>
-
           <motion.div
             className="flex-1 space-y-8"
             initial={{ opacity: 0, y: 50 }}
@@ -97,7 +78,6 @@ const AboutMe = () => {
                   </motion.div>
                 </div>
               </motion.h2>
-
               <motion.div
                 className="h-1 w-0 bg-gradient-to-r from-amber-400 to-orange-600 mt-4"
                 initial={{ width: 0 }}
@@ -105,7 +85,6 @@ const AboutMe = () => {
                 transition={{ duration: 0.8, delay: 0.5 }}
               />
             </div>
-
             <motion.p
               className="text-gray-300 text-lg leading-relaxed"
               initial={{ opacity: 0 }}
@@ -114,7 +93,6 @@ const AboutMe = () => {
             >
               {about.description}
             </motion.p>
-
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
