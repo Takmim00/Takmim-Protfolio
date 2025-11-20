@@ -1,26 +1,48 @@
-import { Save, Upload } from 'lucide-react';
-import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { usePortfolio } from "../../../context/PortfolioContext";
+import { Save, Upload } from "lucide-react"
+import { useRef, useState } from "react"
+import { toast, ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { usePortfolio } from "../../../context/PortfolioContext"
 
 const AboutSection = () => {
-  const { portfolioData, updateAbout } = usePortfolio();
-  const [formData, setFormData] = useState(portfolioData.about);
+  const { portfolioData, updateAbout } = usePortfolio()
+  const [formData, setFormData] = useState(portfolioData.about)
+
+  const aboutImageInputRef = useRef(null)
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }));
-  };
+    }))
+  }
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select an image file")
+        return
+      }
+
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        setFormData((prev) => ({
+          ...prev,
+          image: event.target?.result,
+        }))
+        toast.success("About image uploaded successfully!")
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
   const handleSave = (e) => {
-    e.preventDefault();
-    updateAbout(formData);
-    toast.success("About section updated successfully!");
-  };
+    e.preventDefault()
+    updateAbout(formData)
+    toast.success("About section updated successfully!")
+  }
 
   return (
     <div>
@@ -29,9 +51,7 @@ const AboutSection = () => {
 
       <form onSubmit={handleSave} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Description
-          </label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
           <textarea
             name="description"
             value={formData.description}
@@ -40,15 +60,11 @@ const AboutSection = () => {
             className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-amber-400"
             required
           />
-          <p className="mt-2 text-sm text-gray-500">
-            This text will appear in the About Me section of your portfolio.
-          </p>
+          <p className="mt-2 text-sm text-gray-500">This text will appear in the About Me section of your portfolio.</p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            About Image URL
-          </label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">About Image URL</label>
           <div className="flex gap-2">
             <input
               type="text"
@@ -57,13 +73,29 @@ const AboutSection = () => {
               onChange={handleChange}
               className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-amber-400"
             />
+            <input
+              ref={aboutImageInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="hidden"
+            />
             <button
               type="button"
+              onClick={() => aboutImageInputRef.current?.click()}
               className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+              title="Upload about image"
             >
               <Upload className="w-5 h-5" />
             </button>
           </div>
+          {formData.image && (
+            <img
+              src={formData.image || "/placeholder.svg"}
+              alt="About preview"
+              className="mt-2 h-32 w-auto rounded-lg object-cover border-2 border-amber-400"
+            />
+          )}
         </div>
 
         <div className="flex justify-end">
@@ -77,7 +109,7 @@ const AboutSection = () => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default AboutSection;
+export default AboutSection

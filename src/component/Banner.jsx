@@ -1,8 +1,9 @@
 import { motion, useAnimation, useInView } from "framer-motion";
-import { Download, Github, Instagram, Linkedin } from "lucide-react";
+import { Download, Github, Instagram, Linkedin } from 'lucide-react';
 import { useEffect, useRef, useState } from "react";
 import { FaDiscord } from "react-icons/fa";
 import { usePortfolio } from "../context/PortfolioContext";
+import img from "../assets/Takmim (2).jpg";
 
 // TypewriterEffect Component
 const TypewriterEffect = ({ words = ["Frontend Developer"], speed = 100 }) => {
@@ -10,6 +11,7 @@ const TypewriterEffect = ({ words = ["Frontend Developer"], speed = 100 }) => {
   const [currentText, setCurrentText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [typingSpeed, setTypingSpeed] = useState(speed);
+
   useEffect(() => {
     const word = words[currentWordIndex];
 
@@ -70,6 +72,7 @@ const Banner = () => {
   const { portfolioData } = usePortfolio();
   const personal = portfolioData.personal;
   const social = portfolioData.social;
+
   const controls = useAnimation();
   const ref = useRef(null);
   const inView = useInView(ref, { once: false, threshold: 0.3 });
@@ -82,22 +85,28 @@ const Banner = () => {
       controls.start("visible");
     }
   }, [controls, inView]);
+
   // Track mouse position for 3D effect
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
+
     window.addEventListener("mousemove", handleMouseMove);
+
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
+
   // Calculate transform for 3D effect
   const calculateTransform = (x, y) => {
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
+
     const moveX = (x - centerX) / 50;
     const moveY = (y - centerY) / 50;
+
     return { x: moveX, y: moveY };
   };
 
@@ -105,28 +114,35 @@ const Banner = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
     let animationFrameId;
+
     // Set canvas dimensions
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight * 1.2; // Make it a bit taller to ensure full coverage
     };
+
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
+
     // Particle class
     class Particle {
       constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.radius = Math.random() * 2 + 1;
+
         // Colors that match the amber/orange theme
         const colors = [
           "rgba(251, 191, 36, 0.4)", // amber-400
           "rgba(245, 158, 11, 0.3)", // amber-500
           "rgba(234, 88, 12, 0.2)", // orange-500
         ];
+
         this.color = colors[Math.floor(Math.random() * colors.length)];
         this.velocity = {
           x: (Math.random() - 0.5) * 0.3,
@@ -135,8 +151,10 @@ const Banner = () => {
         this.opacity = Math.random() * 0.5 + 0.2;
         this.life = 100; // Used for fading in/out
       }
+
       draw() {
         if (!ctx) return;
+
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = this.color.replace(
@@ -145,24 +163,30 @@ const Banner = () => {
         );
         ctx.fill();
       }
+
       update() {
         this.x += this.velocity.x;
         this.y += this.velocity.y;
+
         // Bounce off edges with damping
         if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) {
           this.velocity.x = -this.velocity.x * 0.9;
         }
+
         if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
           this.velocity.y = -this.velocity.y * 0.9;
         }
+
         // Slowly change direction occasionally
         if (Math.random() < 0.01) {
           this.velocity.x += (Math.random() - 0.5) * 0.1;
           this.velocity.y += (Math.random() - 0.5) * 0.1;
+
           // Limit max velocity
           this.velocity.x = Math.max(-0.5, Math.min(0.5, this.velocity.x));
           this.velocity.y = Math.max(-0.5, Math.min(0.5, this.velocity.y));
         }
+
         // Pulsate opacity
         this.opacity += Math.sin(this.life * 0.05) * 0.01;
         this.opacity = Math.max(0.1, Math.min(0.6, this.opacity));
@@ -181,6 +205,7 @@ const Banner = () => {
     for (let i = 0; i < particleCount; i++) {
       particles.push(new Particle());
     }
+
     // Connect particles with lines
     const connectParticles = () => {
       const maxDistance = 150;
@@ -207,8 +232,10 @@ const Banner = () => {
     // Animation loop
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       particles.forEach((particle) => particle.update());
       connectParticles();
+
       animationFrameId = requestAnimationFrame(animate);
     };
 
@@ -229,6 +256,7 @@ const Banner = () => {
         className="fixed inset-0 z-0 pointer-events-none"
         style={{ background: "transparent" }}
       /> */}
+
       <div className="container mx-auto md:px-16 py-16 relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between">
           {/* Text Section */}
@@ -264,6 +292,7 @@ const Banner = () => {
                 <TypewriterEffect words={personal.titles} speed={80} />
               </h2>
             </motion.div>
+
             <motion.p
               className="text-lg text-gray-300 max-w-lg mx-auto lg:mx-0"
               variants={{
@@ -273,6 +302,7 @@ const Banner = () => {
             >
               {personal.bio}
             </motion.p>
+
             <motion.div
               className="flex gap-4 justify-center lg:justify-start"
               variants={{
@@ -284,14 +314,11 @@ const Banner = () => {
               }}
             >
               <SocialIcon icon={Linkedin} href={social.linkedin} delay={0.1} />
-              <SocialIcon
-                icon={Instagram}
-                href={social.instagram}
-                delay={0.2}
-              />
+              <SocialIcon icon={Instagram} href={social.instagram} delay={0.2} />
               <SocialIcon icon={Github} href={social.github} delay={0.3} />
               <SocialIcon icon={FaDiscord} href={social.discord} delay={0.4} />
             </motion.div>
+
             <motion.div
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -317,6 +344,7 @@ const Banner = () => {
               </a>
             </motion.div>
           </motion.div>
+
           {/* Image Section */}
           <motion.div
             className="lg:w-1/2 flex justify-center items-center mt-10 lg:mt-0"
@@ -338,9 +366,7 @@ const Banner = () => {
             >
               <div className="relative h-64 w-64 md:h-80 md:w-80 lg:h-96 lg:w-96 rounded-full border-4 border-orange-500 overflow-hidden">
                 <img
-                  src={
-                    personal.profileImage || "https://via.placeholder.com/400"
-                  }
+                  src={personal.profileImage || "https://via.placeholder.com/400"}
                   alt={personal.name}
                   className="w-full h-full object-cover"
                 />
@@ -353,15 +379,14 @@ const Banner = () => {
                 transition={{ duration: 0.5, delay: 1 }}
               >
                 <div className="text-center">
-                  <p className="text-amber-400 text-sm font-bold">
-                    {personal.experience}
-                  </p>
+                  <p className="text-amber-400 text-sm font-bold">{personal.experience}</p>
                   <p className="text-white text-xs">Experience</p>
                 </div>
               </motion.div>
             </motion.div>
           </motion.div>
         </div>
+
         {/* Scroll Indicator */}
         <motion.div
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2"

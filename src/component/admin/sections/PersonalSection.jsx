@@ -1,49 +1,92 @@
-import { Save, Upload } from 'lucide-react';
-import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { usePortfolio } from "../../../context/PortfolioContext";
+import { Save, Upload } from "lucide-react"
+import { useRef, useState } from "react"
+import { toast, ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { usePortfolio } from "../../../context/PortfolioContext"
 
 const PersonalSection = () => {
-  const { portfolioData, updatePersonal } = usePortfolio();
-  const [formData, setFormData] = useState(portfolioData.personal);
+  const { portfolioData, updatePersonal } = usePortfolio()
+  const [formData, setFormData] = useState(portfolioData.personal)
+
+  const profileImageInputRef = useRef(null)
+  const resumeInputRef = useRef(null)
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }));
-  };
+    }))
+  }
+
+  const handleProfileImageUpload = (e) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select an image file")
+        return
+      }
+
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        setFormData((prev) => ({
+          ...prev,
+          profileImage: event.target?.result,
+        }))
+        toast.success("Profile image uploaded successfully!")
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleResumeUpload = (e) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (file.type !== "application/pdf") {
+        toast.error("Please select a PDF file")
+        return
+      }
+
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        setFormData((prev) => ({
+          ...prev,
+          resume: event.target?.result,
+        }))
+        toast.success("Resume uploaded successfully!")
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
   const handleTitlesChange = (index, value) => {
-    const newTitles = [...formData.titles];
-    newTitles[index] = value;
+    const newTitles = [...formData.titles]
+    newTitles[index] = value
     setFormData((prev) => ({
       ...prev,
       titles: newTitles,
-    }));
-  };
+    }))
+  }
 
   const addTitle = () => {
     setFormData((prev) => ({
       ...prev,
       titles: [...prev.titles, ""],
-    }));
-  };
+    }))
+  }
 
   const removeTitle = (index) => {
     setFormData((prev) => ({
       ...prev,
       titles: prev.titles.filter((_, i) => i !== index),
-    }));
-  };
+    }))
+  }
 
   const handleSave = (e) => {
-    e.preventDefault();
-    updatePersonal(formData);
-    toast.success("Personal information updated successfully!");
-  };
+    e.preventDefault()
+    updatePersonal(formData)
+    toast.success("Personal information updated successfully!")
+  }
 
   return (
     <div>
@@ -53,9 +96,7 @@ const PersonalSection = () => {
       <form onSubmit={handleSave} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Full Name
-            </label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
             <input
               type="text"
               name="name"
@@ -67,9 +108,7 @@ const PersonalSection = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Main Title
-            </label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Main Title</label>
             <input
               type="text"
               name="title"
@@ -82,9 +121,7 @@ const PersonalSection = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Bio / Introduction
-          </label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Bio / Introduction</label>
           <textarea
             name="bio"
             value={formData.bio}
@@ -131,9 +168,7 @@ const PersonalSection = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Experience
-          </label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Experience</label>
           <input
             type="text"
             name="experience"
@@ -146,9 +181,7 @@ const PersonalSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Profile Image URL
-            </label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Profile Image URL</label>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -157,19 +190,33 @@ const PersonalSection = () => {
                 onChange={handleChange}
                 className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-amber-400"
               />
+              <input
+                ref={profileImageInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleProfileImageUpload}
+                className="hidden"
+              />
               <button
                 type="button"
+                onClick={() => profileImageInputRef.current?.click()}
                 className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                title="Upload profile image"
               >
                 <Upload className="w-5 h-5" />
               </button>
             </div>
+            {formData.profileImage && (
+              <img
+                src={formData.profileImage || "/placeholder.svg"}
+                alt="Profile preview"
+                className="mt-2 h-20 w-20 rounded-full object-cover border-2 border-amber-400"
+              />
+            )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Resume PDF URL
-            </label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Resume PDF URL</label>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -178,20 +225,28 @@ const PersonalSection = () => {
                 onChange={handleChange}
                 className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-amber-400"
               />
+              <input
+                ref={resumeInputRef}
+                type="file"
+                accept="application/pdf"
+                onChange={handleResumeUpload}
+                className="hidden"
+              />
               <button
                 type="button"
+                onClick={() => resumeInputRef.current?.click()}
                 className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                title="Upload resume PDF"
               >
                 <Upload className="w-5 h-5" />
               </button>
             </div>
+            {formData.resume && <p className="mt-2 text-sm text-green-400">✓ Resume file ready</p>}
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Logo URL
-          </label>
+          <label className="block text-sm font-medium text-gray-300 mb-2">Logo URL</label>
           <input
             type="text"
             name="logo"
@@ -212,7 +267,7 @@ const PersonalSection = () => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default PersonalSection;
+export default PersonalSection
