@@ -2,10 +2,11 @@
 
 import emailjs from "@emailjs/browser"
 import { motion, useAnimation, useInView } from "framer-motion"
-import { Github, Instagram, Linkedin, Loader2, Mail, MapPin, Phone, Send, Twitter } from "lucide-react"
+import { Github, Instagram, Linkedin, Loader2, Mail, MapPin, Phone, Send, Twitter } from 'lucide-react'
 import { useEffect, useRef, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { usePortfolio } from "../context/PortfolioContext";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +22,9 @@ const Contact = () => {
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: false, threshold: 0.2 })
   const controls = useAnimation()
+  const { portfolioData } = usePortfolio();
+  const contact = portfolioData.contact;
+  const social = portfolioData.social;
 
   // Floating elements animation
   const floatingElements = Array.from({ length: 15 }).map((_, i) => ({
@@ -217,28 +221,24 @@ const Contact = () => {
                 </motion.h3>
                 <div className="space-y-8">
                   {/* Contact details with staggered animations */}
-                  {[
-                    {
-                      icon: Mail,
-                      title: "Email",
-                      value: "takmimm@gmail.com",
-                      link: "mailto:takmimm@gmail.com",
-                      delay: 0.5,
-                    },
-                    {
-                      icon: Phone,
-                      title: "Phone",
-                      value: "+880 1824096141",
-                      link: "tel:+8801824096141",
-                      delay: 0.6,
-                    },
-                    {
-                      icon: MapPin,
-                      title: "Location",
-                      value: "Alangkar, Chittagong, Bangladesh",
-                      delay: 0.7,
-                    },
-                  ].map((item, index) => (
+                  {[{
+                    icon: Mail,
+                    title: "Email",
+                    value: contact.email,
+                    link: `mailto:${contact.email}`,
+                    delay: 0.5,
+                  }, {
+                    icon: Phone,
+                    title: "Phone",
+                    value: contact.phone,
+                    link: `tel:${contact.phone}`,
+                    delay: 0.6,
+                  }, {
+                    icon: MapPin,
+                    title: "Location",
+                    value: contact.location,
+                    delay: 0.7,
+                  }].map((item, index) => (
                     <motion.div
                       key={index}
                       className="flex items-start gap-4"
@@ -285,31 +285,26 @@ const Contact = () => {
                 >
                   <h4 className="mb-6 text-lg font-medium text-white">Follow Me</h4>
                   <div className="flex flex-wrap gap-4">
-                    {[
-                      {
-                        icon: Github,
-                        href: "https://github.com/Takmim00",
-                        delay: 0.9,
-                      },
-                      {
-                        icon: Linkedin,
-                        href: "https://www.linkedin.com/in/asm-maghferat-takmim89/",
-                        delay: 1.0,
-                      },
-                      {
-                        icon: Instagram,
-                        href: "https://www.instagram.com/takmim_00/",
-                        delay: 1.1,
-                      },
-                      {
-                        icon: Twitter,
-                        href: "https://x.com/MTakmim58515",
-                        delay: 1.2,
-                      },
-                    ].map((social, index) => (
+                    {[{
+                      icon: Github,
+                      href: social.github,
+                      delay: 0.9,
+                    }, {
+                      icon: Linkedin,
+                      href: social.linkedin,
+                      delay: 1.0,
+                    }, {
+                      icon: Instagram,
+                      href: social.instagram,
+                      delay: 1.1,
+                    }, {
+                      icon: Twitter,
+                      href: social.twitter,
+                      delay: 1.2,
+                    }].map((socialLink, index) => (
                       <motion.a
                         key={index}
-                        href={social.href}
+                        href={socialLink.href}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group relative"
@@ -323,7 +318,7 @@ const Contact = () => {
                               type: "spring",
                               stiffness: 260,
                               damping: 20,
-                              delay: social.delay,
+                              delay: socialLink.delay,
                             },
                           },
                         }}
@@ -331,7 +326,7 @@ const Contact = () => {
                       >
                         <span className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-400 to-orange-600 blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-300" />
                         <div className="relative flex items-center justify-center w-10 h-10 rounded-full border border-gray-700 bg-gray-900 text-gray-400 group-hover:text-white group-hover:border-amber-400 transition-all duration-300">
-                          <social.icon className="w-5 h-5" />
+                          <socialLink.icon className="w-5 h-5" />
                         </div>
                       </motion.a>
                     ))}
@@ -343,22 +338,14 @@ const Contact = () => {
                 {/* Mobile tabs */}
                 <div className="flex mb-8 lg:hidden">
                   <button
-                    className={`flex-1 py-2 text-center transition-colors duration-300 ${
-                      activeTab === "message"
-                        ? "text-amber-400 border-b-2 border-amber-400"
-                        : "text-gray-400 border-b border-gray-800"
-                    }`}
+                    className={`flex-1 py-2 text-center transition-colors duration-300 ${activeTab === "message" ? "text-amber-400 border-b-2 border-amber-400" : "text-gray-400 border-b border-gray-800"}`}
                     onClick={() => setActiveTab("message")}
                     type="button"
                   >
                     Send Message
                   </button>
                   <button
-                    className={`flex-1 py-2 text-center transition-colors duration-300 ${
-                      activeTab === "info"
-                        ? "text-amber-400 border-b-2 border-amber-400"
-                        : "text-gray-400 border-b border-gray-800"
-                    }`}
+                    className={`flex-1 py-2 text-center transition-colors duration-300 ${activeTab === "info" ? "text-amber-400 border-b-2 border-amber-400" : "text-gray-400 border-b border-gray-800"}`}
                     onClick={() => setActiveTab("info")}
                     type="button"
                   >
@@ -371,25 +358,21 @@ const Contact = () => {
                   {/* Contact info tab content */}
                   {activeTab === "info" && (
                     <div className="space-y-6 mb-8">
-                      {[
-                        {
-                          icon: Mail,
-                          title: "Email",
-                          value: "takmimm@gmail.com",
-                          link: "mailto:takmimm@gmail.com",
-                        },
-                        {
-                          icon: Phone,
-                          title: "Phone",
-                          value: "+880 1824096141",
-                          link: "tel:+8801824096141",
-                        },
-                        {
-                          icon: MapPin,
-                          title: "Location",
-                          value: "Alangkar, Chittagong, Bangladesh",
-                        },
-                      ].map((item, index) => (
+                      {[{
+                        icon: Mail,
+                        title: "Email",
+                        value: contact.email,
+                        link: `mailto:${contact.email}`,
+                      }, {
+                        icon: Phone,
+                        title: "Phone",
+                        value: contact.phone,
+                        link: `tel:${contact.phone}`,
+                      }, {
+                        icon: MapPin,
+                        title: "Location",
+                        value: contact.location,
+                      }].map((item, index) => (
                         <div key={index} className="flex items-start gap-4">
                           <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-amber-500/20 to-orange-600/20">
                             <item.icon className="w-4 h-4 text-amber-400" />
@@ -414,26 +397,27 @@ const Contact = () => {
                       <div className="pt-6 border-t border-gray-800/50">
                         <h4 className="mb-4 text-base font-medium text-white">Follow Me</h4>
                         <div className="flex gap-3">
-                          {[
-                            { icon: Github, href: "https://github.com/Takmim00" },
-                            {
-                              icon: Linkedin,
-                              href: "https://www.linkedin.com/in/asm-maghferat-takmim89/",
-                            },
-                            {
-                              icon: Instagram,
-                              href: "https://www.instagram.com/takmim_00/",
-                            },
-                            { icon: Twitter, href: "https://x.com/MTakmim58515" },
-                          ].map((social, index) => (
+                          {[{
+                            icon: Github,
+                            href: social.github,
+                          }, {
+                            icon: Linkedin,
+                            href: social.linkedin,
+                          }, {
+                            icon: Instagram,
+                            href: social.instagram,
+                          }, {
+                            icon: Twitter,
+                            href: social.twitter,
+                          }].map((socialLink, index) => (
                             <a
                               key={index}
-                              href={social.href}
+                              href={socialLink.href}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="flex items-center justify-center w-9 h-9 rounded-full border border-gray-700 bg-gray-900 text-gray-400 hover:text-white hover:border-amber-400 transition-all duration-300"
                             >
-                              <social.icon className="w-4 h-4" />
+                              <socialLink.icon className="w-4 h-4" />
                             </a>
                           ))}
                         </div>
@@ -473,9 +457,7 @@ const Contact = () => {
                         >
                           <label className="block mb-2 text-sm font-medium text-white">Your Name</label>
                           <div
-                            className={`relative rounded-lg overflow-hidden ${
-                              errors.name ? "ring-2 ring-red-500" : ""
-                            }`}
+                            className={`relative rounded-lg overflow-hidden ${errors.name ? "ring-2 ring-red-500" : ""}`}
                           >
                             <input
                               type="text"
@@ -503,9 +485,7 @@ const Contact = () => {
                         >
                           <label className="block mb-2 text-sm font-medium text-white">Email Address</label>
                           <div
-                            className={`relative rounded-lg overflow-hidden ${
-                              errors.email ? "ring-2 ring-red-500" : ""
-                            }`}
+                            className={`relative rounded-lg overflow-hidden ${errors.email ? "ring-2 ring-red-500" : ""}`}
                           >
                             <input
                               type="email"
@@ -534,9 +514,7 @@ const Contact = () => {
                       >
                         <label className="block mb-2 text-sm font-medium text-white">Subject</label>
                         <div
-                          className={`relative rounded-lg overflow-hidden ${
-                            errors.subject ? "ring-2 ring-red-500" : ""
-                          }`}
+                          className={`relative rounded-lg overflow-hidden ${errors.subject ? "ring-2 ring-red-500" : ""}`}
                         >
                           <input
                             type="text"
@@ -564,9 +542,7 @@ const Contact = () => {
                       >
                         <label className="block mb-2 text-sm font-medium text-white">Your Message</label>
                         <div
-                          className={`relative rounded-lg overflow-hidden ${
-                            errors.message ? "ring-2 ring-red-500" : ""
-                          }`}
+                          className={`relative rounded-lg overflow-hidden ${errors.message ? "ring-2 ring-red-500" : ""}`}
                         >
                           <textarea
                             name="message"
